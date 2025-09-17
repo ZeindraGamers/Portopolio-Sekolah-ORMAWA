@@ -1,45 +1,72 @@
-<% layout('layout', { title: 'Peminjaman' }) %>
-<div class="d-flex justify-content-between align-items-end mb-3">
-<div>
-<a class="btn btn-outline-secondary me-2" href="/loans?status=all">Semua</a>
-<a class="btn btn-outline-secondary me-2" href="/loans?status=active">Aktif</a>
-<a class="btn btn-outline-secondary" href="/loans?status=returned">Dikembalikan</a>
-</div>
-<form class="d-flex" method="post" action="/loans/new">
-<select class="form-select me-2" name="item_id" required>
-<% items.forEach(i => { %>
-<option value="<%= i.id %>"><%= i.name %></option>
-<% }) %>
-</select>
-<input class="form-control me-2" name="borrower" placeholder="Peminjam" required>
-<input class="form-control me-2" name="contact" placeholder="Kontak">
-<input class="form-control me-2" type="number" min="1" name="qty" value="1">
-<input class="form-control me-2" type="datetime-local" name="due_at">
-<button class="btn btn-success">+ Pinjam</button>
-</form>
+<!-- filepath: c:\New folder\peminjaman-barang-projek\views\loans.ejs -->
+<div class="d-flex justify-content-between align-items-end mb-3 flex-wrap">
+  <div class="d-flex filter-bar">
+    <a class="btn btn-outline-secondary me-2" href="/loans?status=all">Semua</a>
+    <a class="btn btn-outline-secondary me-2" href="/loans?status=active">Aktif</a>
+    <a class="btn btn-outline-secondary" href="/loans?status=returned">Dikembalikan</a>
+  </div>
+  <button class="btn btn-success" id="showLoanFormBtn">+ Peminjaman</button>
 </div>
 
+<!-- Modal Form -->
+<div id="loanModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeLoanModal">&times;</span>
+    <h3 style="margin-bottom:18px;font-weight:700;">Peminjaman Barang</h3>
+    <form class="loan-form-grid" method="post" action="/loans/new">
+      <select class="form-select" name="item_id" required>
+        <% items.forEach(i => { %>
+          <option value="<%= i.id %>"><%= i.name %></option>
+        <% }) %>
+      </select>
+      <input class="form-control" name="borrower" placeholder="Peminjam" required>
+      <input class="form-control" name="contact" placeholder="Kontak">
+      <input class="form-control" type="number" min="1" name="qty" value="1">
+      <input class="form-control" type="datetime-local" name="due_at">
+      <button class="btn btn-success" style="grid-column:1/-1;margin-top:10px;">Simpan</button>
+    </form>
+  </div>
+</div>
 
 <table class="table table-striped">
-<thead><tr><th>ID</th><th>Item</th><th>Peminjam</th><th>Qty</th><th>Pinjam</th><th>Jatuh Tempo</th><th>Kembali</th><th></th></tr></thead>
-<tbody>
-<% loans.forEach(l => { %>
-<tr>
-<td>#<%= l.id %></td>
-<td><%= l.item_code %> — <%= l.item_name %></td>
-<td><strong><%= l.borrower %></strong><div class="text-muted small"><%= l.contact || '-' %></div></td>
-<td><%= l.qty %></td>
-<td><%= l.borrowed_at %></td>
-<td><%= l.due_at || '-' %></td>
-<td><%= l.returned_at || '-' %></td>
-<td>
-<% if (!l.returned_at) { %>
-<form method="post" action="/loans/<%= l.id %>/return">
-<button class="btn btn-sm btn-outline-primary">Tandai Kembali</button>
-</form>
-<% } %>
-</td>
-</tr>
-<% }) %>
-</tbody>
+  <thead>
+    <tr>
+      <th>ID</th><th>Item</th><th>Peminjam</th><th>Qty</th>
+      <th>Pinjam</th><th>Jatuh Tempo</th><th>Kembali</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% loans.forEach(l => { %>
+      <tr>
+        <td>#<%= l.id %></td>
+        <td><%= l.item_code %> — <%= l.item_name %></td>
+        <td><strong><%= l.borrower %></strong><div class="text-muted small"><%= l.contact || '-' %></div></td>
+        <td><%= l.qty %></td>
+        <td><%= l.borrowed_at %></td>
+        <td><%= l.due_at || '-' %></td>
+        <td><%= l.returned_at || '-' %></td>
+        <td>
+          <% if (!l.returned_at) { %>
+            <form method="post" action="/loans/<%= l.id %>/return">
+              <button class="btn btn-sm btn-outline-primary">Tandai Kembali</button>
+            </form>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
 </table>
+
+<script>
+document.getElementById('showLoanFormBtn').onclick = function() {
+  document.getElementById('loanModal').style.display = 'block';
+};
+document.getElementById('closeLoanModal').onclick = function() {
+  document.getElementById('loanModal').style.display = 'none';
+};
+window.onclick = function(event) {
+  if (event.target == document.getElementById('loanModal')) {
+    document.getElementById('loanModal').style.display = 'none';
+  }
+};
+</script>
