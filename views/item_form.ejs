@@ -1,0 +1,15 @@
+<% layout('layout', { title: (item ? 'Edit' : 'Tambah') + ' Barang' }) %>
+<form method="post">
+<div class="row g-3">
+<div class="col-md-4"><label class="form-label">Kode</label><input class="form-control" name="code" value="<%= item?.code || '' %>" required></div>
+<div class="col-md-8"><label class="form-label">Nama</label><input class="form-control" name="name" value="<%= item?.name || '' %>" required></div>
+<div class="col-md-4"><label class="form-label">Lokasi</label><input class="form-control" name="location" value="<%= item?.location || '' %>"></div>
+<div class="col-md-4"><label class="form-label">Kondisi</label><input class="form-control" name="condition" value="<%= item?.condition || '' %>"></div>
+<div class="col-md-4"><label class="form-label">Qty</label><input class="form-control" type="number" min="0" name="quantity" value="<%= item?.quantity || 1 %>"></div>
+<div class="col-12"><label class="form-label">Catatan</label><textarea class="form-control" name="notes"><%= item?.notes || '' %></textarea></div>
+</div>
+<div class="mt-3 d-flex gap-2">
+<button class="btn btn-primary">Simpan</button>
+<a class="btn btn-secondary" href="/items">Batal</a>
+</div>
+</form>

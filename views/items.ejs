@@ -1,0 +1,24 @@
+<% layout('layout', { title: 'Barang' }) %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+<form class="d-flex" method="get">
+<input class="form-control me-2" name="q" placeholder="Cari kode/nama/lokasi" value="<%= q %>" />
+<button class="btn btn-primary">Cari</button>
+</form>
+<a class="btn btn-success" href="/items/new">+ Tambah Barang</a>
+</div>
+<table class="table table-striped">
+<thead><tr><th>Kode</th><th>Nama</th><th>Lokasi</th><th>Kondisi</th><th>Qty</th><th>Tersedia</th><th></th></tr></thead>
+<tbody>
+<% items.forEach(i=> { %>
+<tr>
+<td><%= i.code %></td>
+<td><%= i.name %></td>
+<td><%= i.location || '-' %></td>
+<td><%= i.condition || '-' %></td>
+<td><%= i.quantity %></td>
+<td><%= i.available %></td>
+<td><a class="btn btn-sm btn-outline-secondary" href="/items/<%= i.id %>/edit">Edit</a></td>
+</tr>
+<% }) %>
+</tbody>
+</table>
